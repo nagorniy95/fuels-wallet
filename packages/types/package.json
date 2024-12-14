@@ -1,0 +1,33 @@
+{
+  "name": "@fuel-wallet/types",
+  "private": true,
+  "version": "0.44.1",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "pnpm ts:check && tsup",
+    "ts:check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "fuels": ">=0.96.1"
+  },
+  "devDependencies": {
+    "dexie": "4.0.9",
+    "fuels": "0.96.1",
+    "json-rpc-2.0": "1.7.0",
+    "tsup": "^7.2.0"
+  }
+}

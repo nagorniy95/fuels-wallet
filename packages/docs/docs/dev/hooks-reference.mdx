@@ -1,0 +1,276 @@
+---
+title: Hooks Reference
+category: For Developers
+---
+
+# React Hooks Reference
+
+## `useAccount`
+
+Retrieves the current fuel account and returns the account address `<string | null>`.
+
+```tsx
+const { account } = useAccount();
+console.log(account);
+// fuel1r20zhd...
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useAccount.ts)
+
+## `useAccounts`
+
+Retrieves the fuel accounts and returns the addresses of the accounts `<string[]>`
+
+```tsx
+const { accounts } = useAccounts();
+console.log(accounts);
+// [fuel1r20zhd..., fuel1qqluc9..., ...]
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useAccounts.ts)
+
+## `useBalance`
+
+Fetches the balance `<BN | null>` of a specified address and asset ID. Additionally, it includes a listener that triggers a balance refresh when the window gains focus.
+
+```tsx
+const { balance } = useBalance({
+  address: 'fuel1r20zhd...',
+  assetId: '0x000000000...',
+});
+
+console.log(balance);
+// 1000 (example balance)
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useBalance.ts)
+
+## `useChain`
+
+Fetches information about the current Fuel network `<ChainInfo | null>`.
+
+```tsx
+const { chain } = useChain();
+console.log(chain.name);
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useChain.ts)
+
+## `useConnect`
+
+Facilitates the connection to the Fuel wallet. Allows selecting a connector by name. It also provides a function `UseMutateAsyncFunction<boolean | undefined>` to initiate the connection and relevant mutation properties for managing the connection state.
+
+```tsx
+const { connect, connectAsync } = useConnect();
+
+const handleConnect = async () => {
+  connect('Fuel Wallet');
+
+  // Async way
+  await connectAsync('exampleConnectorName');
+};
+
+handleConnect();
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useConnect.ts)
+
+## `useConnectors`
+
+Retrieves a list of available connectors `Array<FuelConnector>` for connecting to Fuel.
+
+```tsx
+const { connectors } = useConnectors();
+
+console.log(connectors);
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useConnectors.ts)
+
+## `useContractRead`
+
+Reads and calls a method from a Fuel contract, returns `<InvokeFunctions>`.
+
+
+##### Reading with a Contract instance
+```tsx
+const { contractRead } = useContractRead({
+  contract: _contract,
+  functionName: 'get_count',
+  args: undefined,
+});
+```
+
+##### Reading with ABI + ContractId + Provider
+```tsx
+const { contractRead } = useContractRead({
+  contract: { address, abi: countAbi, provider },
+  functionName: 'get_count',
+  args: undefined,
+});
+```
+> For more information on our Provider, refer to our TS SDK [docs](https://docs.fuel.network/docs/fuels-ts/)   
+
+> Click [here](https://github.com/FuelLabs/fuels-wallet/blob/b5766321dbc2a5e5f17f05e0cb9a9f697f137a23/packages/e2e-contract-tests/src/contracts/contracts/factories/CustomAssetAbi__factory.ts#L16) to see an example of an ABI for a Fuel contract
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useAccount.ts)
+
+## `useDisconnect`
+
+Facilitates disconnection from the Fuel Wallet. It provides a function `UseMutateAsyncFunction<boolean | undefined>` to initiate disconnection.
+
+```tsx
+const { disconnect } = useDisconnect();
+
+const handleDisconnect = async () => {
+  disconnect();
+
+  // Async way
+  await disconnectAsync();  
+};
+
+handleDisconnect();
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useDisconnect.ts)
+
+## `useIsConnected`
+
+Checks whether the user is connected to the Fuel protocol. It provides a `boolean` indicating the connection.
+
+```tsx
+const { isConnected } = useIsConnected();
+console.log(isConnected);
+// true
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useIsConnected.ts)
+
+## `useNodeInfo`
+
+Asynchronously retrieves information about the connected node, checks compatibility with a specified version. The function returns `isCompatible` (a `<boolean>`), and node information.
+
+```tsx
+const { isCompatible } = useNodeInfo();
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useNodeInfo.ts)
+
+## `useProvider`
+
+Returns the provider from the Fuel object instance.
+
+```tsx
+const { provider } = useProvider();
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useProvider.ts)
+
+## `useSendTransaction`
+
+Hook for signing and sending transactions to the Fuel network.
+
+```tsx
+const { sendTransaction, sendTransactionAsync } = useSendTransaction();
+
+const handleSendTransaction = async () => {
+  // The amount of coins to transfer.
+  const amount = bn(1);
+
+  // Create a transaction request using wallet helper (check useWallet hook if needed)
+  const transactionRequest = await wallet.createTransfer(
+    destination,
+    amount
+  );
+
+  sendTransaction({
+    address: '0xd7ad97...', // The address to sign the transaction
+    transactionRequest,
+  })
+
+  // Async way
+  await sendTransactionAsync({
+    address: '0xd7ad97...', // The address to sign the transaction
+    transactionRequest,
+  });
+};
+
+handleSendTransaction();
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useSendTransaction.ts)
+
+## `useTransaction`
+
+Retrieves transaction information associated with a specific transaction ID.
+
+```tsx
+const { transaction } = useTransaction({ txId: '0xd7ad97...' });
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useTransaction.ts)
+
+## <HStack align="center" justify="flex-start" direction="row" wrap="nowrap"> <Code data-decoration="line-through">useTransactionReceipts</Code> <BadgeDeprecated tooltip={<>This hook is deprecated and will be removed in a future release.<br />Please use <b>useTransactionResult</b> with the <b>select</b> function in the <b>query</b> parameter instead.</>} /> </HStack>
+
+Retrieves transaction receipts `Array<TransactionResultReceipt>` associated with a specific transaction ID using the `useFuel` hook.
+
+```tsx
+const { transactionReceipts } = useTransactionReceipts({
+  txId: '0xd7ad97...',
+});
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useTransactionReceipts.ts)
+
+## `useTransactionResult`
+
+Retrieves a transaction result associated with a specific transaction ID.  
+
+##### Basic Usage
+
+```tsx
+const { transactionResult } = useTransactionResult({ txId: '0xd7ad97...' });
+```
+
+##### Custom Name
+
+Customize the `data` attribute of the most recently resolved data.
+
+```tsx
+const { anything } = useTransactionResult({ 
+  txId: '0xd7ad97...',
+  query: {
+    name: 'anything',
+  },
+});
+```
+
+##### Custom Selector
+
+Transform or select a specific part of the data returned by the query function.  
+This modification affects the returned data value but does not impact the data stored in the query cache.
+
+```tsx
+const { receipts } = useTransactionResult({ 
+  txId: '0xd7ad97...',
+  query: {
+    // you can omit custom "name" if you don't need it
+    name: 'receipts',
+    // ((data: TransactionResult<TransactionType> | null) => T) | undefined
+    select: (data) => data?.receipts,
+  },
+});
+```
+
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useTransactionResult.ts)
+
+## `useWallet`
+
+Retrieves wallet instance `<Account | null>` and ensures the presence of a valid address and fuel instance.
+
+```tsx
+const { wallet } = useWallet({ address: 'fuel1r20zhd...' });
+```
+
+[See the source file](https://github.com/FuelLabs/fuel-connectors/tree/main/packages/react/src/hooks/useWallet.ts)
